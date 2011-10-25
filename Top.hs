@@ -22,36 +22,36 @@ main = do
       sWet = wettedArea config
       sWing = wingArea_sqFeet config
   
-  putStrLn "------------- configuration: --------------"
+  putStrLn "-------------------------- configuration: -----------------------------"
   print gaCruiseConfig
 
-  putStrLn "\n------------ wetted area: ---------------"
+  putStrLn "\n------------------------- wetted area: ------------------------------"
   printWettedArea gaCruiseConfig
 
-  putStrLn "\n------------ upsweep drag: --------------"
+  putStrLn "\n------------------------ upsweep drag: ------------------------------"
   let cD_pUpsweep' = cD_pUpsweep config
       cD_upsweep' = cD_upsweep config
   _ <- cD_pUpsweep' `seq` printf "Cd upsweep referenced to fuselage: %.7f\n" cD_pUpsweep'
   _ <- cD_upsweep' `seq` printf "Cd upsweep referenced to wing:     %.7f\n" cD_upsweep'
 
-  putStrLn "\n----------- frictional drag: -------------"
-  _ <- cF `seq` printf "skin friction coeff Cf:\t\t\t\t%.5f\n" cF
-  _ <-          printf "skin friction coeff Cf referenced to wing area:\t%.5f\n" (cF*sWet/sWing)
+  putStrLn "\n---------------------- frictional drag: -----------------------------"
+  _ <- cF `seq` printf "skin friction coeff Cf referenced to wetted area:\t%.5f\n" cF
+  _ <-          printf "skin friction coeff Cf referenced to wing:\t\t%.5f\n\n" (cF*sWet/sWing)
   
-  putStrLn "\n-------------- form drag: -------------"
-  _ <- k `seq`  printf "form factor k:\t\t\t\t%.5f\n\n" k
-  _ <- cD_parasitic' `seq` printf "Cd_frictional referenced to wetted area:\t%.5f\n" ((k-1)*cF)
-  _ <- cD_parasitic' `seq` printf "Cd_frictional referenced to wing area:\t\t%.5f\n" ((k-1)*cF*sWet/sWing)
+  putStrLn "\n------------------------- form drag: --------------------------------"
+  _ <- k `seq`  printf "form factor k:\t\t\t\t%.5f\n" k
+  _ <- printf "Cd_form referenced to wetted area:\t%.5f\n" ((k-1)*cF)
+  _ <- printf "Cd_form referenced to wing area:\t%.5f\n" ((k-1)*cF*sWet/sWing)
   
-  putStrLn "\n--------- frictional plus form drag: -------------"
-  _ <- cD_parasitic' `seq` printf "Cd_frictional referenced to wing area:\t\t%.5f\n" cD_parasitic'
+  putStrLn "\n----------------- frictional drag + form drag: ----------------------"
+  _ <- cD_parasitic' `seq` printf "Cd_frictional_form referenced to wing:\t%.5f\n" cD_parasitic'
   
-  putStrLn "\n--------- total parasitic drag (for now: frictional + form + upsweep): -------------"
-  _ <- printf "Cd_parasitic referenced to wing area:\t\t%.5f\n\n" (cD_parasitic' + cD_upsweep')
-  
+  putStrLn "\n---- total parasitic drag (for now: frictional + form + upsweep): ----"
+  _ <- printf "Cd_parasitic referenced to wing:\t%.5f\n\n" (cD_parasitic' + cD_upsweep')
   -- make some plots
-  plotCfModel
-  plotFormFactorModel
+--  plotCfModel
+--  plotFormFactorModel
+  return ()
 
 
 printWettedArea :: Config -> IO ()
