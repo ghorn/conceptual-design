@@ -39,7 +39,6 @@ paraboloidArea d fineness = pi*r/(6*h*h)*( (r*r + 4*h*h)**(3/2) - r*r*r )
     r = 0.5*d
     h = fineness*d
     
-
 main :: IO ()
 main = do
   
