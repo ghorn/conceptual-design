@@ -23,9 +23,9 @@ cD_parasitic config = k*cF*sWet/sWing
     sWet = wettedArea config
     
 cF_skinFriction :: Config -> Double
-cF_skinFriction config = cF_inviscid*(compressibilityFactor config)
+cF_skinFriction config = cF_incompressible*(compressibilityFactor config)
   where
-    cF_inviscid = cfOfReynolds (cruiseReynolds config)
+    cF_incompressible = cfOfReynolds (cruiseReynolds config)
 
 formFactorMarkup :: Floating a => a -> a -> a
 formFactorMarkup mach bodyFineness' = (1 + c*bigDuMaxU0)^(2::Int)
