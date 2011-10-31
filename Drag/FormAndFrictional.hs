@@ -11,10 +11,9 @@ module Drag.FormAndFrictional( cfOfReynolds
                              , cF_skinFriction
                              ) where
 
-import Debug.Trace
-
 import Drag.WettedArea
 import Config(Config(..), cruiseReynolds, bodyFineness, getMachNumber)
+import Warn(warn)
 
 cD_formAndFrictional :: Config -> Double
 cD_formAndFrictional config = k*(cD_form config)
@@ -49,16 +48,16 @@ formFactorMarkup mach bodyFineness' = (1 + c*bigDuMaxU0)^(2::Int)
     m = mach
 
 compressibilityFactor :: Config -> Double
-compressibilityFactor _ = trace message markdown
+compressibilityFactor _ = warn message markdown
   where
     message = "WARNING: using fixed compressibility markdown: " ++ show (markdown*100) ++ "%"
     markdown = 0.97
 
 cfOfReynolds :: Floating a => a -> a
-cfOfReynolds = trace "WARNING: using fully turbulent fit (xt/c == 0) in parasitic Cf calculation" cfOfReynolds'
+cfOfReynolds = warn "WARNING: using fully turbulent fit (xt/c == 0) in parasitic Cf calculation" cfOfReynolds'
 
 cfOfReynolds' :: Floating a => a -> a
-cfOfReynolds' re = trace message $ (1 + skinRoughnessMarkup)*logFit
+cfOfReynolds' re = warn message $ (1 + skinRoughnessMarkup)*logFit
   where
     message :: String
     message = "MESSAGE: using fixed skin roughness Cf markup: "++show (100*skinRoughnessMarkup)++"%"

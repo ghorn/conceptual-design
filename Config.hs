@@ -9,8 +9,9 @@ module Config( Config(..)
              , getMachNumber
              ) where
 
-import Debug.Trace
 import Text.Printf
+
+import Warn(warn)
 
 data Config = Config { diameter_feet :: Double
                      , totalLength_feet :: Double
@@ -40,7 +41,7 @@ gaCruiseConfig = Config { diameter_feet       = 61/12
                         }
 
 cruiseReynolds :: Config -> Double
-cruiseReynolds _ = trace "WARNING: using fixed reynolds only valid at 25,000 ft, 331 knots (mach 0.55), length 400 inches" re
+cruiseReynolds _ = warn "WARNING: using fixed reynolds only valid at 25,000 ft, 331 knots (mach 0.55), length 400 inches" re
   where
     re = 61685521
 
@@ -48,4 +49,4 @@ bodyFineness :: Config -> Double
 bodyFineness config = totalLength_feet config / diameter_feet config
 
 getMachNumber :: Config -> Double
-getMachNumber _ = trace "WARNING: using fixed mach number of 0.55 only valid at from 25,000 ft, 331 knots" 0.55
+getMachNumber _ = warn "WARNING: using fixed mach number of 0.55 only valid at from 25,000 ft, 331 knots" 0.55

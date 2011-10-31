@@ -5,11 +5,11 @@
 module Misc( pressureOfHeight
            ) where
 
-import Debug.Trace
+import Warn(warn)
 
 -- SI units
 pressureOfHeight :: Floating a => a -> a
-pressureOfHeight h = trace "WARNING: pressureOfHeight (SI) is untested" $ p0*(1 - l*h/t0)**(g*m/(r*l))
+pressureOfHeight h = warn "WARNING: pressureOfHeight (SI) is untested" $ p0*(1 - l*h/t0)**(g*m/(r*l))
   where
     p0 = 101325
     l = 0.0065

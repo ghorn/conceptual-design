@@ -7,13 +7,12 @@ module Drag.Upsweep( cD_upsweep
                    ) where
 
 import Config(Config(..))
-
-import Debug.Trace
+import Warn(warn)
 
 cD_pUpsweep :: Config -> Double
 cD_pUpsweep _ = 0.075*hOverL075
   where
-    hOverL075 = trace "WARNING: using fuse upsweep estimated from Eclipse 500" 16/215    
+    hOverL075 = warn "WARNING: using fuse upsweep estimated from Eclipse 500" $ 16/215
 
 cD_upsweep :: Config -> Double
 cD_upsweep config = cD_wing
