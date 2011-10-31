@@ -2,9 +2,9 @@
 
 {-# OPTIONS_GHC -Wall #-}
 
-module UpsweepDrag( cD_upsweep
-                  , cD_pUpsweep
-                  ) where
+module Drag.UpsweepDrag( cD_upsweep
+                       , cD_pUpsweep
+                       ) where
 
 import Config(Config(..))
 

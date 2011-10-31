@@ -1,11 +1,11 @@
--- top.hs
+-- Top.hs
 
 {-# OPTIONS_GHC -Wall #-}
 
 import Config
-import WettedArea
-import UpsweepDrag
-import ParasiticDrag
+import Drag.WettedArea
+import Drag.UpsweepDrag
+import Drag.ParasiticDrag
 
 import Graphics.Rendering.Chart hiding (c)
 import Graphics.Rendering.Chart.Gtk
@@ -48,9 +48,10 @@ main = do
   
   putStrLn "\n---- total parasitic drag (for now: frictional + form + upsweep): ----"
   _ <- printf "Cd_parasitic referenced to wing:\t%.5f\n\n" (cD_parasitic' + cD_upsweep')
+  
   -- make some plots
---  plotCfModel
---  plotFormFactorModel
+  plotCfModel
+  plotFormFactorModel
   return ()
 
 
@@ -91,7 +92,7 @@ plotFormFactorModel = do
              $ plot_lines_title ^= "k"
              $ defaultPlotLines
   
-      chart = layout1_title ^= "form factor markup k vs body fineness ration (mach 0.55)"
+      chart = layout1_title ^= "form factor markup k vs body fineness ratio (mach 0.55)"
               $ layout1_plots ^= [Left (toPlot line)]
               $ defaultLayout1
 

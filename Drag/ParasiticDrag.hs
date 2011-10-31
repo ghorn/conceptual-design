@@ -2,16 +2,16 @@
 
 {-# OPTIONS_GHC -Wall #-}
 
-module ParasiticDrag( cfOfReynolds
-                    , cfOfReynolds'
-                    , cD_parasitic
-                    , formFactorMarkup
-                    , cF_skinFriction
-                    ) where
+module Drag.ParasiticDrag( cfOfReynolds
+                         , cfOfReynolds'
+                         , cD_parasitic
+                         , formFactorMarkup
+                         , cF_skinFriction
+                         ) where
 
 import Debug.Trace
 
-import WettedArea
+import Drag.WettedArea
 import Config(Config(..), cruiseReynolds, bodyFineness, getMachNumber)
 
 cD_parasitic :: Config -> Double

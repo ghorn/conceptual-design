@@ -2,10 +2,10 @@
 
 {-# OPTIONS_GHC -Wall #-}
 
-module WettedArea( wettedArea
-                 , paraboloidArea
-                 , cylinderArea
-                 ) where
+module Drag.WettedArea( wettedArea
+                      , paraboloidArea
+                      , cylinderArea
+                      ) where
 
 import Config(Config(..))
 
