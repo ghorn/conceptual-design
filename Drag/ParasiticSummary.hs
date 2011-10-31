@@ -58,24 +58,6 @@ main = do
   return ()
 
 
-printWettedArea :: Floating a => Config a -> IO ()
-printWettedArea (Config { diameter_feet = diameter
-                   , totalLength_feet = overallLength
-                   , noseFineness = fNose
-                   , tailFineness = fTail
-                   }) = do
-  let centerLength = overallLength - diameter*fNose - diameter*fTail
-      
-      noseArea = paraboloidArea diameter fNose
-      tailArea = paraboloidArea diameter fTail
-      centerArea = cylinderArea diameter centerLength
-      totalFuseArea = noseArea + tailArea + centerArea
-
-  putStrLn $ "nose cone area:        " ++ show noseArea ++ " ft^2"
-  putStrLn $ "tail cone area:        " ++ show tailArea ++ " ft^2"
-  putStrLn $ "main fuse area:        " ++ show centerArea ++ " ft^2"
-  putStrLn $ "total fuselage area:   " ++ show totalFuseArea ++ " ft^2"
-
 plotCfModel :: IO ()
 plotCfModel = do
   let line = plot_lines_values ^= [[ (LogValue re, LogValue (cfOfReynolds' re))

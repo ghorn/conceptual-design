@@ -3,8 +3,10 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Drag.WettedArea( wettedArea
+                      , wingWettedArea
                       , paraboloidArea
                       , cylinderArea
+                      , printWettedArea
                       ) where
 
 import Config(Config(..))
@@ -14,7 +16,9 @@ wettedArea (Config { diameter_feet = diameter
                    , totalLength_feet = overallLength
                    , noseFineness = fNose
                    , tailFineness = fTail
-                   }) = totalArea
+                   , wingArea_sqFeet = wingArea
+                   , thicknessToChordRatio = tOverC
+                   }) = totalWettedArea
   where
     centerLength = overallLength - diameter*fNose - diameter*fTail
     
@@ -22,14 +26,12 @@ wettedArea (Config { diameter_feet = diameter
     tailArea = paraboloidArea diameter fTail
     centerArea = cylinderArea diameter centerLength
     
-    totalArea = noseArea + tailArea + centerArea
+    wingWettedArea' = wingWettedArea wingArea tOverC
+    
+    totalWettedArea = noseArea + tailArea + centerArea + wingWettedArea'
 
---main :: IO ()
---main = do
---  putStrLn $ "noseArea: " ++ show (paraboloidArea (diameter_feet gaCruiseConfig) (noseFineness gaCruiseConfig))
---  let diameter = diameter_feet gaCruiseConfig
---      lNose = diameter*(noseFineness gaCruiseConfig)
---  putStrLn $ "noseArea: " ++ show (0.75*pi*diameter*lNose)
+wingWettedArea :: Fractional a => a -> a -> a
+wingWettedArea wingArea tOverC = 2.0*(1 + 0.2*tOverC)*wingArea
 
 --coneSectionArea d0 d1 h0
 --  | d0 == d1  = 2*pi*r0*h0
@@ -52,3 +54,31 @@ paraboloidArea d fineness = pi*r/(6*h*h)*( (r*r + 4*h*h)**(3/2) - r*r*r )
   where
     r = 0.5*d
     h = fineness*d
+
+
+
+printWettedArea :: Floating a => Config a -> IO ()
+printWettedArea (Config { diameter_feet = diameter
+                   , totalLength_feet = overallLength
+                   , noseFineness = fNose
+                   , tailFineness = fTail
+                   , wingArea_sqFeet = wingArea
+                   , thicknessToChordRatio = tOverC
+                   }) = do
+  let centerLength = overallLength - diameter*fNose - diameter*fTail
+      
+      noseArea = paraboloidArea diameter fNose
+      tailArea = paraboloidArea diameter fTail
+      centerArea = cylinderArea diameter centerLength
+      totalFuseArea = noseArea + tailArea + centerArea
+
+      wingWettedArea' = wingWettedArea wingArea tOverC
+      totalWettedArea = totalFuseArea + wingWettedArea'
+
+  putStrLn $ "nose cone area:        " ++ show noseArea ++ " ft^2"
+  putStrLn $ "tail cone area:        " ++ show tailArea ++ " ft^2"
+  putStrLn $ "main fuse area:        " ++ show centerArea ++ " ft^2"
+  putStrLn $ "total fuselage area:   " ++ show totalFuseArea ++ " ft^2"
+  putStrLn ""
+  putStrLn $ "wing wetted area:      " ++ show wingWettedArea' ++ " ft^2"
+  putStrLn $ "total wetted area:     " ++ show totalWettedArea ++ " ft^2"

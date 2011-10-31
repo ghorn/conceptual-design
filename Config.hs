@@ -20,6 +20,7 @@ data Config a = Config { diameter_feet :: a
                        , altitude_feet :: a
                        , airspeed_knots :: a
                        , wingArea_sqFeet :: a
+                       , thicknessToChordRatio :: a
                        }
 instance PrintfArg a => Show (Config a) where
   show config = printf "diameter:       %.3f ft\n" (diameter_feet config) ++
@@ -27,17 +28,19 @@ instance PrintfArg a => Show (Config a) where
                 printf "nose fineness:  %f\n" (noseFineness config) ++ 
                 printf "tail fineness:  %f\n" (tailFineness config) ++
                 printf "altitude:       %f ft\n" (altitude_feet config) ++
-                printf "airspeed:       %f knots\n" (airspeed_knots config)++
-                printf "wing area:      %f ft^2" (wingArea_sqFeet config)
+                printf "airspeed:       %f knots\n" (airspeed_knots config) ++
+                printf "wing area:      %f ft^2" (wingArea_sqFeet config) ++
+                printf "t/c:            %f" (thicknessToChordRatio config)
               
 gaCruiseConfig :: Fractional a => Config a
-gaCruiseConfig = Config { diameter_feet       = 61/12
-                        , totalLength_feet    = 400/12
-                        , noseFineness        = 2
-                        , tailFineness        = 3
-                        , altitude_feet       = 25000
-                        , airspeed_knots      = 331
-                        , wingArea_sqFeet     = 144
+gaCruiseConfig = Config { diameter_feet         = 61/12
+                        , totalLength_feet      = 400/12
+                        , noseFineness          = 2
+                        , tailFineness          = 3
+                        , altitude_feet         = 25000
+                        , airspeed_knots        = 331
+                        , wingArea_sqFeet       = 144
+                        , thicknessToChordRatio = 0.1
                         }
 
 cruiseReynolds :: Num a => Config a -> a
