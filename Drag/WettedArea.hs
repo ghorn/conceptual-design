@@ -1,4 +1,4 @@
--- wettedArea.hs
+-- WettedArea.hs
 
 {-# OPTIONS_GHC -Wall #-}
 

@@ -43,9 +43,9 @@ Build-type:          Simple
 Cabal-version:       >=1.2
 
 
-Executable aa241-design
+Executable parasiticSummary
   -- .hs or .lhs file containing the Main module.
-  Main-is:           Top.hs
+  Main-is:           Drag/ParasiticSummary.hs
   
   -- Packages needed in order to build this package.
   Build-depends:     base, data-accessor, Chart

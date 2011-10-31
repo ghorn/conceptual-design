@@ -1,27 +1,38 @@
--- ParasiticDrag.hs
+-- FormAndFrictional.hs
 
 {-# OPTIONS_GHC -Wall #-}
 
-module Drag.ParasiticDrag( cfOfReynolds
-                         , cfOfReynolds'
-                         , cD_parasitic
-                         , formFactorMarkup
-                         , cF_skinFriction
-                         ) where
+module Drag.FormAndFrictional( cfOfReynolds
+                             , cfOfReynolds'
+                             , cD_formAndFrictional
+                             , cD_form
+                             , cD_frictional
+                             , formFactorMarkup
+                             , cF_skinFriction
+                             ) where
 
 import Debug.Trace
 
 import Drag.WettedArea
 import Config(Config(..), cruiseReynolds, bodyFineness, getMachNumber)
 
-cD_parasitic :: Config -> Double
-cD_parasitic config = k*cF*sWet/sWing
+cD_formAndFrictional :: Config -> Double
+cD_formAndFrictional config = k*(cD_form config)
   where
     k = formFactorMarkup (getMachNumber config) (bodyFineness config)
+
+cD_frictional :: Config -> Double
+cD_frictional config = (k-1)*(cD_form config)
+  where
+    k = formFactorMarkup (getMachNumber config) (bodyFineness config)
+
+cD_form :: Config -> Double
+cD_form config = cF*sWet/sWing
+  where
     cF = cF_skinFriction config
     sWing = wingArea_sqFeet config
     sWet = wettedArea config
-    
+
 cF_skinFriction :: Config -> Double
 cF_skinFriction config = cF_incompressible*(compressibilityFactor config)
   where

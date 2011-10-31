@@ -1,16 +1,18 @@
--- Top.hs
+-- ParasiticSummary.hs
 
 {-# OPTIONS_GHC -Wall #-}
 
-import Config
-import Drag.WettedArea
-import Drag.UpsweepDrag
-import Drag.ParasiticDrag
+module Main where
 
 import Graphics.Rendering.Chart hiding (c)
 import Graphics.Rendering.Chart.Gtk
 import Data.Accessor
 import Text.Printf
+
+import Config
+import Drag.WettedArea
+import Drag.Upsweep
+import Drag.FormAndFrictional
 
 main :: IO ()
 main = do
@@ -18,7 +20,7 @@ main = do
     
       k = formFactorMarkup (getMachNumber config) (bodyFineness config)
       cF = cF_skinFriction config
-      cD_parasitic' = cD_parasitic config
+      cD_formAndFrictional' = cD_formAndFrictional config
       sWet = wettedArea config
       sWing = wingArea_sqFeet config
   
@@ -44,14 +46,14 @@ main = do
   _ <- printf "Cd_form referenced to wing area:\t%.5f\n" ((k-1)*cF*sWet/sWing)
   
   putStrLn "\n----------------- frictional drag + form drag: ----------------------"
-  _ <- cD_parasitic' `seq` printf "Cd_frictional_form referenced to wing:\t%.5f\n" cD_parasitic'
+  _ <- cD_formAndFrictional' `seq` printf "Cd_frictional_form referenced to wing:\t%.5f\n" cD_formAndFrictional'
   
   putStrLn "\n---- total parasitic drag (for now: frictional + form + upsweep): ----"
-  _ <- printf "Cd_parasitic referenced to wing:\t%.5f\n\n" (cD_parasitic' + cD_upsweep')
+  _ <- printf "Cd_parasitic referenced to wing:\t%.5f\n\n" (cD_formAndFrictional' + cD_upsweep')
   
   -- make some plots
-  plotCfModel
-  plotFormFactorModel
+  --plotCfModel
+  --plotFormFactorModel
   return ()
 
 
