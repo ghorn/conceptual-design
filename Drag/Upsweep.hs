@@ -9,12 +9,12 @@ module Drag.Upsweep( cD_upsweep
 import Config(Config(..))
 import Warn(warn)
 
-cD_pUpsweep :: Config -> Double
+cD_pUpsweep :: Fractional a => Config a -> a
 cD_pUpsweep _ = 0.075*hOverL075
   where
     hOverL075 = warn "WARNING: using fuse upsweep estimated from Eclipse 500" $ 16/215
 
-cD_upsweep :: Config -> Double
+cD_upsweep :: Floating a => Config a -> a
 cD_upsweep config = cD_wing
   where 
     maxDiameter = diameter_feet config

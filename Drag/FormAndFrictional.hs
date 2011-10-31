@@ -15,24 +15,24 @@ import Drag.WettedArea
 import Config(Config(..), cruiseReynolds, bodyFineness, getMachNumber)
 import Warn(warn)
 
-cD_formAndFrictional :: Config -> Double
+cD_formAndFrictional :: Floating a => Config a -> a
 cD_formAndFrictional config = k*(cD_form config)
   where
     k = formFactorMarkup (getMachNumber config) (bodyFineness config)
 
-cD_frictional :: Config -> Double
+cD_frictional :: Floating a => Config a -> a
 cD_frictional config = (k-1)*(cD_form config)
   where
     k = formFactorMarkup (getMachNumber config) (bodyFineness config)
 
-cD_form :: Config -> Double
+cD_form :: Floating a => Config a -> a
 cD_form config = cF*sWet/sWing
   where
     cF = cF_skinFriction config
     sWing = wingArea_sqFeet config
     sWet = wettedArea config
 
-cF_skinFriction :: Config -> Double
+cF_skinFriction :: Floating a => Config a -> a
 cF_skinFriction config = cF_incompressible*(compressibilityFactor config)
   where
     cF_incompressible = cfOfReynolds (cruiseReynolds config)
@@ -47,7 +47,7 @@ formFactorMarkup mach bodyFineness' = (1 + c*bigDuMaxU0)^(2::Int)
     d = 1/bodyFineness'
     m = mach
 
-compressibilityFactor :: Config -> Double
+compressibilityFactor :: Fractional a => Config a -> a
 compressibilityFactor _ = warn message markdown
   where
     message = "WARNING: using fixed compressibility markdown: " ++ show (markdown*100) ++ "%"

@@ -16,7 +16,8 @@ import Drag.FormAndFrictional
 
 main :: IO ()
 main = do
-  let config = gaCruiseConfig
+  let config :: Config Double
+      config = gaCruiseConfig
     
       k = formFactorMarkup (getMachNumber config) (bodyFineness config)
       cF = cF_skinFriction config
@@ -25,10 +26,10 @@ main = do
       sWing = wingArea_sqFeet config
   
   putStrLn "-------------------------- configuration: -----------------------------"
-  print gaCruiseConfig
+  print config
 
   putStrLn "\n------------------------- wetted area: ------------------------------"
-  printWettedArea gaCruiseConfig
+  printWettedArea config
 
   putStrLn "\n------------------------ upsweep drag: ------------------------------"
   let cD_pUpsweep' = cD_pUpsweep config
@@ -57,7 +58,7 @@ main = do
   return ()
 
 
-printWettedArea :: Config -> IO ()
+printWettedArea :: Floating a => Config a -> IO ()
 printWettedArea (Config { diameter_feet = diameter
                    , totalLength_feet = overallLength
                    , noseFineness = fNose

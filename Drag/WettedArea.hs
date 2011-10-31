@@ -9,7 +9,7 @@ module Drag.WettedArea( wettedArea
 
 import Config(Config(..))
 
-wettedArea :: Config -> Double
+wettedArea :: Floating a => Config a -> a
 wettedArea (Config { diameter_feet = diameter
                    , totalLength_feet = overallLength
                    , noseFineness = fNose

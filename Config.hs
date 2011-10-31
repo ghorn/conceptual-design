@@ -13,15 +13,15 @@ import Text.Printf
 
 import Warn(warn)
 
-data Config = Config { diameter_feet :: Double
-                     , totalLength_feet :: Double
-                     , noseFineness :: Double
-                     , tailFineness :: Double
-                     , altitude_feet :: Double
-                     , airspeed_knots :: Double
-                     , wingArea_sqFeet :: Double
-                     }
-instance Show Config where
+data Config a = Config { diameter_feet :: a
+                       , totalLength_feet :: a
+                       , noseFineness :: a
+                       , tailFineness :: a
+                       , altitude_feet :: a
+                       , airspeed_knots :: a
+                       , wingArea_sqFeet :: a
+                       }
+instance PrintfArg a => Show (Config a) where
   show config = printf "diameter:       %.3f ft\n" (diameter_feet config) ++
                 printf "total length:   %.3f ft\n" (totalLength_feet config) ++
                 printf "nose fineness:  %f\n" (noseFineness config) ++ 
@@ -30,7 +30,7 @@ instance Show Config where
                 printf "airspeed:       %f knots\n" (airspeed_knots config)++
                 printf "wing area:      %f ft^2" (wingArea_sqFeet config)
               
-gaCruiseConfig :: Config
+gaCruiseConfig :: Fractional a => Config a
 gaCruiseConfig = Config { diameter_feet       = 61/12
                         , totalLength_feet    = 400/12
                         , noseFineness        = 2
@@ -40,13 +40,13 @@ gaCruiseConfig = Config { diameter_feet       = 61/12
                         , wingArea_sqFeet     = 144
                         }
 
-cruiseReynolds :: Config -> Double
+cruiseReynolds :: Num a => Config a -> a
 cruiseReynolds _ = warn "WARNING: using fixed reynolds only valid at 25,000 ft, 331 knots (mach 0.55), length 400 inches" re
   where
     re = 61685521
 
-bodyFineness :: Config -> Double
+bodyFineness :: Fractional a => Config a -> a
 bodyFineness config = totalLength_feet config / diameter_feet config
 
-getMachNumber :: Config -> Double
+getMachNumber :: Fractional a => Config a -> a
 getMachNumber _ = warn "WARNING: using fixed mach number of 0.55 only valid at from 25,000 ft, 331 knots" 0.55
