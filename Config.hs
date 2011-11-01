@@ -29,8 +29,8 @@ instance PrintfArg a => Show (Config a) where
                 printf "tail fineness:      %f\n" (tailFineness config) ++
                 printf "cruise altitude:    %f ft\n" (cruiseAltitude_feet config) ++
                 printf "cruise mach:        %f\n" (cruise_mach config) ++
-                printf "wing area:          %f ft^2" (wingArea_sqFeet config) ++
-                printf "t/c:                %f" (thicknessToChordRatio config) ++
+                printf "wing area:          %f ft^2\n" (wingArea_sqFeet config) ++
+                printf "t/c:                %f\n" (thicknessToChordRatio config) ++
                 printf "max takeoff weight: %f lbs" (maxTakeoffWeight_lb config)
               
 gaCruiseConfig :: Fractional a => Config a
