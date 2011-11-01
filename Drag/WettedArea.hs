@@ -10,6 +10,7 @@ module Drag.WettedArea( wettedArea
                       ) where
 
 import Config(Config(..))
+import Warn(warn)
 
 wettedArea :: Floating a => Config a -> a
 wettedArea (Config { diameter_feet = diameter
@@ -18,8 +19,10 @@ wettedArea (Config { diameter_feet = diameter
                    , tailFineness = fTail
                    , wingArea_sqFeet = wingArea
                    , thicknessToChordRatio = tOverC
-                   }) = totalWettedArea
+                   }) = warn msg totalWettedArea
   where
+    msg = "WARNING: wetted area neglecting tail"
+    
     centerLength = overallLength - diameter*fNose - diameter*fTail
     
     noseArea = paraboloidArea diameter fNose

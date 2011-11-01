@@ -38,8 +38,8 @@ main = do
   _ <- cD_upsweep' `seq` printf "Cd upsweep referenced to wing:     %.7f\n" cD_upsweep'
 
   putStrLn "\n---------------------- frictional drag: -----------------------------"
-  _ <- cF `seq` printf "skin friction coeff Cf referenced to wetted area:\t%.5f\n" cF
-  _ <-          printf "skin friction coeff Cf referenced to wing:\t\t%.5f\n\n" (cF*sWet/sWing)
+  _ <- cF   `seq` printf "skin friction coeff Cf referenced to wetted area:\t%.5f\n" cF
+  _ <- sWet `seq` printf "skin friction coeff Cf referenced to wing:\t\t%.5f\n\n" (cF*sWet/sWing)
   
   putStrLn "\n------------------------- form drag: --------------------------------"
   _ <- k `seq`  printf "form factor k:\t\t\t\t%.5f\n" k
