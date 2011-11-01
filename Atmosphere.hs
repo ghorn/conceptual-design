@@ -3,7 +3,9 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Atmosphere( densitySIOfHeightFeet
+                 , speedOfSoundMetersPerSecondOfAltitudeFeet
                  , atmospherePlots
+                 , accelerationDueToGravity
                  ) where
 
 import Warn(warn)
@@ -23,13 +25,17 @@ import Data.Accessor
 --    m = 0.029
 --    r = 8.314
 
+
+accelerationDueToGravity :: Fractional a => a
+accelerationDueToGravity = 9.807
+
 densitySIOfHeightFeet :: (Ord a, Floating a) => a -> a
 densitySIOfHeightFeet z_feet = warn "WARNING: densityOfHeight (SI) is untested" $ rho_SI
   where
     rho_SI = rho0*exp(-gamma*g*z_meters/(a0*a0))
     rho0 = 1.225
     gamma = 1.4
-    g = 9.807
+    g = accelerationDueToGravity
     z_meters = z_feet/3.2808399
     tempC = temperatureCOfHeightFeet z_feet
     a0 = speedOfSoundMetersPerSecondOfTemperatureC tempC
@@ -42,8 +48,7 @@ speedOfSoundMetersPerSecondOfAltitudeFeet alt_feet = a
 
 
 speedOfSoundMetersPerSecondOfTemperatureC :: Floating a => a -> a
-speedOfSoundMetersPerSecondOfTemperatureC tempC = warn "WARNING: speedOfSoundOfTemperatureC (SI) is untested" $
-                                                  331.3*sqrt(1 + tempC/273.15)
+speedOfSoundMetersPerSecondOfTemperatureC tempC = 331.3*sqrt(1 + tempC/273.15)
 
 temperatureCOfHeightFeet :: (Ord a, Fractional a) => a -> a
 temperatureCOfHeightFeet alt

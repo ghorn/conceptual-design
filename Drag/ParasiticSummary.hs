@@ -19,7 +19,7 @@ main = do
   let config :: Config Double
       config = gaCruiseConfig
     
-      k = formFactorMarkup (getMachNumber config) (bodyFineness config)
+      k = formFactorMarkup (cruise_mach config) (bodyFineness config)
       cF = cF_skinFriction config
       cD_formAndFrictional' = cD_formAndFrictional config
       sWet = wettedArea config

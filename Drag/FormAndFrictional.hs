@@ -12,18 +12,18 @@ module Drag.FormAndFrictional( cfOfReynolds
                              ) where
 
 import Drag.WettedArea
-import Config(Config(..), cruiseReynolds, bodyFineness, getMachNumber)
+import Config(Config(..), cruiseReynolds, bodyFineness)
 import Warn(warn)
 
 cD_formAndFrictional :: Floating a => Config a -> a
 cD_formAndFrictional config = k*(cD_form config)
   where
-    k = formFactorMarkup (getMachNumber config) (bodyFineness config)
+    k = formFactorMarkup (cruise_mach config) (bodyFineness config)
 
 cD_frictional :: Floating a => Config a -> a
 cD_frictional config = (k-1)*(cD_form config)
   where
-    k = formFactorMarkup (getMachNumber config) (bodyFineness config)
+    k = formFactorMarkup (cruise_mach config) (bodyFineness config)
 
 cD_form :: Floating a => Config a -> a
 cD_form config = cF*sWet/sWing
