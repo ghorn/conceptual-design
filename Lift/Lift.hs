@@ -41,4 +41,3 @@ main = do
   putStrLn $ "maxTakeoffWeight_kg: " ++ show maxTakeoffWeight_kg
   putStrLn $ "wingArea_sqrMeters: " ++ show wingArea_sqrMeters
   putStrLn $ "g: " ++ show g
-
