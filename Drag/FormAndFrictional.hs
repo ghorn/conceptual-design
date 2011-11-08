@@ -16,17 +16,15 @@ import Config(Config(..), cruiseReynolds, bodyFineness)
 import Warn(warn)
 
 cD_formAndFrictional :: Floating a => Config a -> a
-cD_formAndFrictional config = k*(cD_form config)
-  where
-    k = formFactorMarkup (cruise_mach config) (bodyFineness config)
-
-cD_frictional :: Floating a => Config a -> a
-cD_frictional config = (k-1)*(cD_form config)
+cD_formAndFrictional config = k*(cD_frictional config)
   where
     k = formFactorMarkup (cruise_mach config) (bodyFineness config)
 
 cD_form :: Floating a => Config a -> a
-cD_form config = cF*sWet/sWing
+cD_form config = (cD_formAndFrictional config) - (cD_frictional config)
+
+cD_frictional :: Floating a => Config a -> a
+cD_frictional config = cF*sWet/sWing
   where
     cF = cF_skinFriction config
     sWing = wingArea_sqFeet config
