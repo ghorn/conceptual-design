@@ -2,11 +2,11 @@
 
 {-# OPTIONS_GHC -Wall #-}
 
-module Drag.Upsweep( cD_upsweep
-                   , cD_pUpsweep
-                   ) where
+module Aero.Drag.Upsweep( cD_upsweep
+                        , cD_pUpsweep
+                        ) where
 
-import Config(Config(..))
+import Design.Config(Config(..))
 import Warn(warn)
 
 cD_pUpsweep :: Fractional a => Config a -> a

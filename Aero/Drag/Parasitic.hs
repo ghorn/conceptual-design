@@ -2,11 +2,11 @@
 
 {-# OPTIONS_GHC -Wall #-}
 
-module Drag.Parasitic( cD_parasitic
-                     ) where
+module Aero.Drag.Parasitic( cD_parasitic
+                          ) where
 
-import Drag.FormAndFrictional(cD_form, cD_frictional)
-import Drag.Upsweep(cD_upsweep)
+import Aero.Drag.FormAndFrictional(cD_form, cD_frictional)
+import Aero.Drag.Upsweep(cD_upsweep)
 import Warn(warn)
 
 import Config(Config)

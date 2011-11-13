@@ -2,11 +2,12 @@
 
 {-# OPTIONS_GHC -Wall #-}
 
-module Lift.Lift( cruiseCL
+module Aero.Lift( cruiseCL
+                , liftSummary
                 ) where
 
-import Atmosphere
-import Config
+import Aero.Atmosphere
+import Design.Config(Config(..))
 
 cruiseCL :: (Ord a, Floating a) => Config a -> a
 cruiseCL config = 0.97*maxTakeoffWeight_kg*g/(0.5*rho*v**2*wingArea_sqrMeters)
@@ -19,11 +20,9 @@ cruiseCL config = 0.97*maxTakeoffWeight_kg*g/(0.5*rho*v**2*wingArea_sqrMeters)
       where
         a = speedOfSoundMetersPerSecondOfAltitudeFeet (cruiseAltitude_feet config)
 
-main :: IO ()
-main = do
-  let config = gaCruiseConfig
-      cl :: Double
-      cl = 0.97*maxTakeoffWeight_kg*g/(0.5*rho*v**2*wingArea_sqrMeters)
+liftSummary :: (Ord a, Floating a) => Config a -> IO ()
+liftSummary config = do
+  let cl = 0.97*maxTakeoffWeight_kg*g/(0.5*rho*v**2*wingArea_sqrMeters)
 
       g = accelerationDueToGravity
       maxTakeoffWeight_kg = (maxTakeoffWeight_lb config)*0.45359237

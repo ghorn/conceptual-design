@@ -2,11 +2,11 @@
 
 {-# OPTIONS_GHC -Wall #-}
 
-module Atmosphere( densitySIOfHeightFeet
-                 , speedOfSoundMetersPerSecondOfAltitudeFeet
-                 , atmospherePlots
-                 , accelerationDueToGravity
-                 ) where
+module Aero.Atmosphere( densitySIOfHeightFeet
+                      , speedOfSoundMetersPerSecondOfAltitudeFeet
+                      , atmospherePlots
+                      , accelerationDueToGravity
+                      ) where
 
 import Warn(warn)
 

@@ -2,14 +2,14 @@
 
 {-# OPTIONS_GHC -Wall #-}
 
-module Drag.WettedArea( wettedArea
-                      , wingWettedArea
-                      , paraboloidArea
-                      , cylinderArea
-                      , printWettedArea
-                      ) where
+module Aero.Drag.WettedArea( wettedArea
+                           , wingWettedArea
+                           , paraboloidArea
+                           , cylinderArea
+                           , printWettedArea
+                           ) where
 
-import Config(Config(..))
+import Design.Config(Config(..))
 import Warn(warn)
 
 wettedArea :: Floating a => Config a -> a

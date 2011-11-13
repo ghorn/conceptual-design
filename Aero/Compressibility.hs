@@ -2,11 +2,11 @@
 
 {-# OPTIONS_GHC -Wall #-}
 
-module Compressiblity( computeCpStar
-                     , computeMcc
-                     , computeMDiv
-                     , plotMDivVsTOverC
-                     ) where
+module Aero.Compressiblity( computeCpStar
+                          , computeMcc
+                          , computeMDiv
+                          , plotMDivVsTOverC
+                          ) where
 
 import Graphics.Rendering.Chart hiding (c)
 import Graphics.Rendering.Chart.Gtk

@@ -9,10 +9,10 @@ import Graphics.Rendering.Chart.Gtk
 import Data.Accessor
 import Text.Printf
 
-import Config
-import Drag.WettedArea
-import Drag.Upsweep
-import Drag.FormAndFrictional
+import Design.Config
+import Aero.Drag.WettedArea
+import Aero.Drag.Upsweep
+import Aero.Drag.FormAndFrictional
 
 main :: IO ()
 main = do

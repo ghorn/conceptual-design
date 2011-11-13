@@ -2,17 +2,17 @@
 
 {-# OPTIONS_GHC -Wall #-}
 
-module Drag.FormAndFrictional( cfOfReynolds
-                             , cfOfReynolds'
-                             , cD_formAndFrictional
-                             , cD_form
-                             , cD_frictional
-                             , formFactorMarkup
-                             , cF_skinFriction
-                             ) where
+module Aero.Drag.FormAndFrictional( cfOfReynolds
+                                  , cfOfReynolds'
+                                  , cD_formAndFrictional
+                                  , cD_form
+                                  , cD_frictional
+                                  , formFactorMarkup
+                                  , cF_skinFriction
+                                  ) where
 
-import Drag.WettedArea
-import Config(Config(..), cruiseReynolds, bodyFineness)
+import Aero.Drag.WettedArea
+import Design.Config(Config(..), cruiseReynolds, bodyFineness)
 import Warn(warn)
 
 cD_formAndFrictional :: Floating a => Config a -> a

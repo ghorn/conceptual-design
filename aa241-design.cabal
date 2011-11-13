@@ -44,15 +44,10 @@ Cabal-version:       >=1.2
 
 
 Executable parasiticSummary
-  -- .hs or .lhs file containing the Main module.
-  Main-is:           Drag/ParasiticSummary.hs
-  
-  -- Packages needed in order to build this package.
+  Main-is:           Design/ParasiticSummary.hs
   Build-depends:     base, data-accessor, Chart
-  
-  -- Modules not exported by this package.
-  -- Other-modules:       
-  
-  -- Extra tools (e.g. alex, hsc2hs, ...) needed to build the source.
-  -- Build-tools:         
-  
+  Ghc-options:       -O2
+
+Executable liftSummary
+  Main-is:           Design/LiftSummary.hs
+  Ghc-options:       -O2

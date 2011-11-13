@@ -2,11 +2,11 @@
 
 {-# OPTIONS_GHC -Wall #-}
 
-module Config( Config(..)
-             , gaCruiseConfig
-             , cruiseReynolds
-             , bodyFineness
-             ) where
+module Design.Config( Config(..)
+                    , gaCruiseConfig
+                    , cruiseReynolds
+                    , bodyFineness
+                    ) where
 
 import Text.Printf
 
