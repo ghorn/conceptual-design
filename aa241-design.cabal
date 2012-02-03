@@ -45,7 +45,7 @@ Cabal-version:       >=1.2
 
 Executable parasiticSummary
   Main-is:           Design/ParasiticSummary.hs
-  Build-depends:     base, data-accessor, Chart
+  Build-depends:     base, data-accessor, Chart >= 0.15, Chart-gtk >= 0.15
   Ghc-options:       -O2
 
 Executable liftSummary
