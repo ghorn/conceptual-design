@@ -60,7 +60,7 @@ paraboloidArea d fineness = pi*r/(6*h*h)*( (r*r + 4*h*h)**(3/2) - r*r*r )
 
 
 
-printWettedArea :: Floating a => Config a -> IO ()
+printWettedArea :: (Show a, Floating a) => Config a -> IO ()
 printWettedArea (Config { diameter_feet = diameter
                    , totalLength_feet = overallLength
                    , noseFineness = fNose

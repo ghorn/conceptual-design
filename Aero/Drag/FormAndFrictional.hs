@@ -15,22 +15,22 @@ import Aero.Drag.WettedArea
 import Design.Config(Config(..), cruiseReynolds, bodyFineness)
 import Warn(warn)
 
-cD_formAndFrictional :: Floating a => Config a -> a
+cD_formAndFrictional :: (Show a, Floating a) => Config a -> a
 cD_formAndFrictional config = k*(cD_frictional config)
   where
     k = formFactorMarkup (cruise_mach config) (bodyFineness config)
 
-cD_form :: Floating a => Config a -> a
+cD_form :: Floating a => Show a => Config a -> a
 cD_form config = (cD_formAndFrictional config) - (cD_frictional config)
 
-cD_frictional :: Floating a => Config a -> a
+cD_frictional :: (Show a, Floating a) => Config a -> a
 cD_frictional config = cF*sWet/sWing
   where
     cF = cF_skinFriction config
     sWing = wingArea_sqFeet config
     sWet = wettedArea config
 
-cF_skinFriction :: Floating a => Config a -> a
+cF_skinFriction :: (Show a, Floating a) => Config a -> a
 cF_skinFriction config = cF_incompressible*(compressibilityFactor config)
   where
     cF_incompressible = cfOfReynolds (cruiseReynolds config)
@@ -45,16 +45,16 @@ formFactorMarkup mach bodyFineness' = (1 + c*bigDuMaxU0)^(2::Int)
     d = 1/bodyFineness'
     m = mach
 
-compressibilityFactor :: Fractional a => Config a -> a
+compressibilityFactor :: (Show a, Fractional a) => Config a -> a
 compressibilityFactor _ = warn message markdown
   where
     message = "WARNING: using fixed compressibility markdown: " ++ show (markdown*100) ++ "%"
     markdown = 0.97
 
-cfOfReynolds :: Floating a => a -> a
+cfOfReynolds :: (Show a, Floating a) => a -> a
 cfOfReynolds = warn "WARNING: using fully turbulent fit (xt/c == 0) in parasitic Cf calculation" cfOfReynolds'
 
-cfOfReynolds' :: Floating a => a -> a
+cfOfReynolds' :: (Show a, Floating a) => a -> a
 cfOfReynolds' re = warn message $ (1 + skinRoughnessMarkup)*logFit
   where
     message :: String

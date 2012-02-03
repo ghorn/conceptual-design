@@ -20,7 +20,7 @@ cruiseCL config = 0.97*maxTakeoffWeight_kg*g/(0.5*rho*v**2*wingArea_sqrMeters)
       where
         a = speedOfSoundMetersPerSecondOfAltitudeFeet (cruiseAltitude_feet config)
 
-liftSummary :: (Ord a, Floating a) => Config a -> IO ()
+liftSummary :: (Ord a, Floating a, Show a) => Config a -> IO ()
 liftSummary config = do
   let cl = 0.97*maxTakeoffWeight_kg*g/(0.5*rho*v**2*wingArea_sqrMeters)
 
