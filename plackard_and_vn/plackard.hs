@@ -2,59 +2,83 @@
 
 module Main where
 
---import Graphics.Rendering.Chart hiding (c)
---import Graphics.Rendering.Chart.Gtk
---import Data.Accessor
+import Graphics.Rendering.Chart hiding (c)
+import Graphics.Rendering.Chart.Gtk
+import Data.Accessor
 
+--------- INPUTS -------
 -- typical cruise mach number
 m_typicalCruise :: Double
-m_typicalCruise = 0.55
+m_typicalCruise = 0.6
 
+-- structural design altitude
+structuralDesignAltitude :: Double
+structuralDesignAltitude = 25000
+
+-------- DESIGN CHOICE ----------
+-- structural design cruise mach number
+m_c :: Double
+m_c = m_mo
+
+-------- "MODELING" -------
 -- max operating mach number
 m_mo :: Double
 m_mo = 1.06*m_typicalCruise
 
--- 1. structural design cruise mach number
-m_c :: Double
-m_c = m_mo
-
--- 2. design dive mach number
+-- design dive mach number
 m_d :: Double
 m_d = m_mo*1.07
 
--- dive airspeed number
-v_d :: Double
-v_d = 1.15*v_c
+-- dive airspeed
+v_d :: Double -> Double
+v_d z = 1.15*(v_c z)
 
--- design altitude
-designAltitude :: Double
-designAltitude = 25000 -- feet
+--------- OUTPUTS ---------
+-- design cruise airspeed at alt
+v_c_atDesignAlt :: Double
+v_c_atDesignAlt = m_c*(speedOfSoundAtAlt structuralDesignAltitude)
 
--- design cruise airspeed
-v_c :: Double
-v_c = 0
+-- structural design cruise equivalent airspeed
+v_c :: Double -> Double
+v_c z = v_c_atDesignAlt*sqrt((densityAtAlt structuralDesignAltitude)/(densityAtAlt z))
 
+-- dive intersection
+zCrit_d :: Double
+zCrit_d = gss (\z -> abs( (speedOfSoundAtAlt z)*m_d - (v_d z))) (0,100000) (1e-6) (1e-6)
 
 main :: IO ()
 main = do
---  let config :: Config Double
---      config = gaCruiseConfig
---    
+  print $ "zCrit_d: " ++ show zCrit_d
+  let dz = 20
+      zMax = 49900
+      v_c_line = plot_lines_values ^= [[ (v_c z, z) | z <- [0,dz..structuralDesignAltitude::Double]]]
+                 $ plot_lines_title ^= "v_c"
+                 $ defaultPlotLines
+      v_d_line = plot_lines_values ^= [[ (v_d z, z) | z <- [0,dz..zCrit_d::Double]]]
+                 $ plot_lines_title ^= "v_d"
+                 $ defaultPlotLines
+      m_c_line = plot_lines_values ^= [[ ((speedOfSoundAtAlt z)*m_c, z) | z <- [structuralDesignAltitude,structuralDesignAltitude+dz..zMax::Double]]]
+                 $ plot_lines_title ^= "m_c"
+                 $ defaultPlotLines
+      m_d_line = plot_lines_values ^= [[ ((speedOfSoundAtAlt z)*m_d, z) | z <- [zCrit_d,zCrit_d+dz..zMax::Double]]]
+                 $ plot_lines_title ^= "m_d"
+                 $ defaultPlotLines
+      chart = layout1_title ^= "Plackard Diagram"
+              $ layout1_plots ^= map (Left . toPlot) [ v_c_line
+                                                     , v_d_line
+                                                     , m_c_line
+                                                     , m_d_line]
+              $ defaultLayout1
+  
+  renderableToWindow (toRenderable chart) 640 480
+--  _ <- renderableToPNGFile (toRenderable chart) 640 480 "cf_model.png"
   return ()
 
+densityAtAlt :: Double -> Double
+densityAtAlt z = density (atmos z undefined)
 
---plotCfModel :: IO ()
---plotCfModel = do
---  let line = plot_lines_values ^= [[ (LogValue re, LogValue (cfOfReynolds' re))
---                                   | y <- [5,5.1..9::Double], let re = 10**y]]
---             $ plot_lines_title ^= "cf"
---             $ defaultPlotLines
---      chart = layout1_title ^= "cf vs Reynolds"
---              $ layout1_plots ^= [Left (toPlot line)]
---              $ defaultLayout1
---  renderableToWindow (toRenderable chart) 640 480
---  _ <- renderableToPNGFile (toRenderable chart) 640 480 "cf_model.png"
---  return ()
+speedOfSoundAtAlt :: Double -> Double
+speedOfSoundAtAlt z = soundSpeed (atmos z undefined)
 
 data Atmos a = Atmos { staticTemp :: a
                      , staticPress :: a
@@ -111,3 +135,24 @@ atmos alt trueAirspeed = Atmos { staticTemp = temp
       | alt >= 36152 && alt <= 82345 = (389.98, 2116.217 * 0.2236 * exp((36000-alt)/(53.35*389.98)))
       -- 
       | alt >= 82345 = (389.98 + 1.645 * (alt - 82345)/1000, 2116.217 *0.02456 * ((temp'/389.98)**(-11.388)))
+
+
+
+tau :: Floating a => a
+tau = 2/(1+sqrt(5))
+
+gss :: (Floating a, Ord a) => (a -> a) -> (a,a) -> a -> a -> a
+gss f (x0,x3) epsX epsF = 0.5*(xl+xr)
+  where
+    stoppingCriterion (xl',xr') = xr'-xl' > epsX || f (0.5*(xl'+xr')) > epsF
+    (xl, xr) = head $ dropWhile stoppingCriterion $ goldenSectionSteps f (x0,x1,x2,x3)
+    x1 = x0 + (x3-x0)*(1-tau)
+    x2 = x0 + (x3-x0)*tau
+
+goldenSectionSteps :: (Floating a, Ord a) => (a -> a) -> (a, a, a, a) -> [(a,a)]
+goldenSectionSteps f (x0, x1, x2, x3)
+  | (f x1) < (f x2) = (x0,x2):(goldenSectionSteps f (x0,x1',x1,x2))
+  | otherwise       = (x1,x3):(goldenSectionSteps f (x1,x2,x2',x3))
+  where
+    x1' = x0 + (x2-x0)*(1-tau)
+    x2' = x1 + (x3-x1)*tau
