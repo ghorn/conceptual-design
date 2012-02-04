@@ -48,7 +48,8 @@ zCrit_d = gss (\z -> abs( (speedOfSoundAtAlt z)*m_d - (v_d z))) (0,100000) (1e-6
 
 main :: IO ()
 main = do
-  print $ "zCrit_d: " ++ show zCrit_d
+  putStrLn $ "V_c: " ++ show (v_c 20000) ++ " mph at 20,000 ft"
+  putStrLn $ "V_d: " ++ show (v_d 20000) ++ " mph at 20,000 ft"
   let dz = 20
       zMax = 49900
       v_c_line = plot_lines_values ^= [[ (v_c z, z) | z <- [0,dz..structuralDesignAltitude::Double]]]
