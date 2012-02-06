@@ -74,8 +74,10 @@ fprintf('outer panel --> wing CL_max correction: %.2f\nnew CL_max: %f\n\n', k_op
 
 % FAR acceleration
 k_far = 1.11;
-CL_max = CL_max/k_far;
-fprintf('FAR acceleration correction factor: 1 / %.3f\nnew CL_max: %f\n\n', k_far, CL_max)
+% CL_max = CL_max/k_far;
+% fprintf('FAR acceleration correction factor: 1 / %.3f\nnew CL_max: %f\n\n', k_far, CL_max)
+CL_max = CL_max*k_far;
+fprintf('FAR acceleration correction factor: %.3f\nnew CL_max: %f\n\n', k_far, CL_max)
 
 % no slats or wing-mounted engines
 fprintf('(no slats or wing-mounted engines)\n\n')
