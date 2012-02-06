@@ -6,6 +6,7 @@ module Aero.Atmosphere( densitySIOfHeightFeet
                       , speedOfSoundMetersPerSecondOfAltitudeFeet
                       , atmospherePlots
                       , accelerationDueToGravity
+                      , kinematicViscositySIOfAltitudeFeet
                       ) where
 
 import Warn(warn)
@@ -24,6 +25,15 @@ import Data.Accessor
 --    g = 9.807
 --    m = 0.029
 --    r = 8.314
+
+kinematicViscositySIOfAltitudeFeet :: (Ord a, Fractional a) => a -> a
+kinematicViscositySIOfAltitudeFeet altitudeFeet = -1.1555e-14  * tempK^(3 :: Int)
+                                                  + 9.5728e-11 * tempK^(2 :: Int)
+                                                  + 3.7604e-8  * tempK 
+                                                  - 3.4484e-6
+  where
+    tempK = tempC + 273.15
+    tempC = temperatureCOfHeightFeet altitudeFeet
 
 
 accelerationDueToGravity :: Fractional a => a
