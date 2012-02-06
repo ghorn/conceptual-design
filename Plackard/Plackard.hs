@@ -56,6 +56,8 @@ main = do
   putStrLn $ "zCrit_d: " ++ show zCrit_d ++ " ft"
   putStrLn $ "V_d(crit): " ++ show (v_d zCrit_d) ++ " mph"
   putStrLn $ "V_d(crit): " ++ show ((speedOfSoundAtAlt zCrit_d)*m_d) ++ " mph"
+  putStrLn $ "V_c: " ++ show (v_c 20000) ++ " mph at 20,000 ft"
+  putStrLn $ "V_d: " ++ show (v_d 20000) ++ " mph at 20,000 ft"
   let dz = 20
       zMax = 49900
       v_c_line = plot_lines_values ^= [[ (v_c z, z) | z <- [0,dz..structuralDesignAltitude::Double]]]
@@ -78,5 +80,5 @@ main = do
               $ defaultLayout1
   
   renderableToWindow (toRenderable chart) 640 480
---  _ <- renderableToPNGFile (toRenderable chart) 640 480 "cf_model.png"
+--  _ <- renderableToPNGFile (toRenderable chart) 640 480 "plackard.png"
   return ()
