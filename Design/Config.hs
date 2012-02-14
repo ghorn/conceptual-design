@@ -9,9 +9,8 @@ module Design.Config( Config(..)
                     , chordFeet
                     ) where
 
-import Text.Printf
-
 import Warn(warn)
+import Data.List(intersperse)
 
 data Config a = Config { diameter_feet :: a
                        , totalLength_feet :: a
@@ -25,17 +24,36 @@ data Config a = Config { diameter_feet :: a
                        , maxTakeoffWeight_lb :: a
                        }
 
-instance PrintfArg a => Show (Config a) where
-  show config = printf "diameter:           %.3f ft\n" (diameter_feet config) ++
-                printf "total length:       %.3f ft\n" (totalLength_feet config) ++
-                printf "nose fineness:      %f\n" (noseFineness config) ++ 
-                printf "tail fineness:      %f\n" (tailFineness config) ++
-                printf "cruise altitude:    %f ft\n" (cruiseAltitude_feet config) ++
-                printf "cruise mach:        %f\n" (cruise_mach config) ++
-                printf "wing area:          %f ft^2\n" (wingArea_sqFeet config) ++
-                printf "aspect ratio:       %f\n" (aspectRatio config) ++
-                printf "t/c:                %f\n" (thicknessToChordRatio config) ++
-                printf "max takeoff weight: %f lbs" (maxTakeoffWeight_lb config)
+                   
+prettyShow :: Show b => String -> a -> [(String, a -> b, String)] -> String
+prettyShow title thingy stuffToPrint = "------ " ++ title ++ ": -------\n" ++
+                                        (concat $ (intersperse "\n" $ map nicePrint stuffToPrint))
+  where
+    maxNumChars = maximum $ map (\(x,_,_) -> length x) stuffToPrint
+    nicePrint (name,f,units) = name ++ ":" ++ (replicate (1 + maxNumChars - length name) ' ') ++
+                               show (f thingy) ++ (unit units)
+    unit "" = ""
+    unit x = " ("++x++")"
+    
+    
+instance (Floating a, Show a) => Show (Config a) where
+  show config = prettyShow "main configuration" config
+                [ ("diameter", diameter_feet, "ft")
+                , ("total length", totalLength_feet, "ft")
+                , ("nose fineness", noseFineness, "")
+                , ("tail fineness", tailFineness, "")
+                , ("cruise altitude", cruiseAltitude_feet, "ft")
+                , ("cruise mach", cruise_mach, "")
+                , ("wing area", wingArea_sqFeet, "ft^2")
+                , ("aspect ratio", aspectRatio, "")
+                , ("t/c", thicknessToChordRatio, "")
+                , ("max takeoff weight", maxTakeoffWeight_lb, "lbs")
+                , ("zero fuel weight", zeroFuelWeight_lb, "lbs")
+                , ("sweep", sweep_deg, "deg")
+                , ("taper ratio", taperRatio, "")
+                , ("n_ult", n_ult, "")
+                , ("wingspan", wSpan_ft, "ft")
+                ] ++ "\n\n" ++ show (horizTail config)
               
 gaCruiseConfig :: Fractional a => Config a
 gaCruiseConfig = Config { diameter_feet         = 61/12
