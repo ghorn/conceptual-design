@@ -104,6 +104,7 @@ w - ZFW_max - wing weight (wing weight including wing-mounted engines, nacelles,
     allCargoMarkdown
       | allCargo config = 1 - 0.085
       | otherwise       = 1
+    
     iFuse
       | ip >= ib  = ip
       | otherwise = (ip*ip + ib*ib)/(2*ib)
@@ -119,7 +120,7 @@ w - ZFW_max - wing weight (wing weight including wing-mounted engines, nacelles,
     h = diameter_feet config
     l = totalLength_feet config - 0.5*(rootChord_ft config)
 --    n = warn "fuseWeight_lbs using load limit factor at fixed zero fuel weight" 5.6
-    n = 5.6
+    n = 3.95
     w = zeroFuelWeightEst_lb config - wingWeight_lb config
 
 -- 5. landing gear

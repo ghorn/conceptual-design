@@ -6,7 +6,7 @@ meanAerodynamicChordFt = 4;
 S_m = 13.3780378; % m^2 == 144 ft^2
 S_ft = 144;
 g = 9.8;
-W_lb = 3000;
+W_lb = 5255;
 m = 0.45359237*W_lb; % mass in kg
 W_kg = m*g;
 rho = 0.65295;  % SI
