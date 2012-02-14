@@ -4,6 +4,7 @@
 
 module Aero.Drag.WettedArea( wettedArea
                            , wingWettedArea
+                           , grossFuseWettedArea
                            , paraboloidArea
                            , cylinderArea
                            , printWettedArea
@@ -13,25 +14,29 @@ import Design.Config(Config(..))
 import Warn(warn)
 
 wettedArea :: Floating a => Config a -> a
-wettedArea (Config { diameter_feet = diameter
-                   , totalLength_feet = overallLength
-                   , noseFineness = fNose
-                   , tailFineness = fTail
-                   , exposedWingArea_ft2 = wingArea
-                   , thicknessToChordRatio = tOverC
-                   }) = warn msg totalWettedArea
+wettedArea config@(Config { exposedWingArea_ft2 = wingArea
+                          , thicknessToChordRatio = tOverC
+                          }) = warn msg totalWettedArea
   where
     msg = "WARNING: wetted area neglecting tail"
     
+    wingWettedArea' = wingWettedArea wingArea tOverC
+    grossFuseWettedArea' = grossFuseWettedArea config
+    
+    totalWettedArea = wingWettedArea' + grossFuseWettedArea'
+
+grossFuseWettedArea :: Floating a => Config a -> a
+grossFuseWettedArea (Config { diameter_feet = diameter
+                            , totalLength_feet = overallLength
+                            , noseFineness = fNose
+                            , tailFineness = fTail
+                            }) = noseArea + tailArea + centerArea
+  where
     centerLength = overallLength - diameter*fNose - diameter*fTail
     
     noseArea = paraboloidArea diameter fNose
     tailArea = paraboloidArea diameter fTail
     centerArea = cylinderArea diameter centerLength
-    
-    wingWettedArea' = wingWettedArea wingArea tOverC
-    
-    totalWettedArea = noseArea + tailArea + centerArea + wingWettedArea'
 
 wingWettedArea :: Fractional a => a -> a -> a
 wingWettedArea wingArea tOverC = 2.0*(1 + 0.2*tOverC)*wingArea
