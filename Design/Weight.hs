@@ -6,7 +6,6 @@ module Design.Weight( weightSummary
                     ) where
 
 import Design.Config
-import Design.WorkingConfig
 import Aero.Drag.WettedArea( grossFuseWettedArea )
 import Atmosphere.Convenience(pressure_lb_per_ft2_from_altitude_ft)
 import Plackard.Linesearch(gss)
@@ -233,21 +232,6 @@ trueZeroFuelWeight_lb :: (Floating a, Ord a) => Config a -> a
 trueZeroFuelWeight_lb config = gss f (1,15000) 1e-3 1e-3
   where
     f zfw = abs $ zfw - zeroFuelWeight_lb (config {zeroFuelWeightEst_lb = zfw})
-
-main :: IO ()
-main = do
-  let config = gaCruiseConfig :: Config Double
-  print config
-  putStrLn "\n\n"  
-  putStrLn "-------------------------------------------"
-  putStrLn "-------- guessed zero fuel weight: --------"
-  putStrLn "-------------------------------------------"
-  weightSummary config
-  putStrLn "\n\n--------------------------------------------"
-  putStrLn "--------- solved zero fuel weight: ---------"
-  putStrLn "--------------------------------------------"
-  weightSummary (config {zeroFuelWeightEst_lb = trueZeroFuelWeight_lb config})
-  
 
 weightSummary :: (Floating a, Ord a, Show a) => Config a -> IO ()
 weightSummary config = do

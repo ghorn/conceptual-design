@@ -78,6 +78,10 @@ Executable liftSummary
   Main-is:           LiftSummary.hs
 --  Ghc-options:       -O2
 
+Executable weightSummary
+  Main-is:           WeightSummary.hs
+--  Ghc-options:       -O2
+
 Executable plackard
   Main-is:           Plackard/Plackard.hs
 --  Ghc-options:       -O2
