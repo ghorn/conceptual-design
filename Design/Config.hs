@@ -42,6 +42,7 @@ data Config a = Config { diameter_feet :: a
                        , enginesDryWeight_lb :: a
                        , electricalAndElectronics_lb :: a
                        , furnishings_lb :: a
+                       , structuralWeightFactor :: a
                        , numPax :: Int
                        , numCrew :: Int
                        , numFlightAttendants :: Int
@@ -123,6 +124,7 @@ instance (Floating a, Show a) => Show (Config a) where
                 , ("engines dry weight", enginesDryWeight_lb, "lb")
                 , ("electrical/electronics weight", electricalAndElectronics_lb, "lb")
                 , ("furnishings weight", furnishings_lb, "lb")
+                , ("structural weight factor", structuralWeightFactor, "lb")
 --                , ("T-tail?", tTail, "")
 --                , ("all cargo?", allCargo, "")
 --                , ("surface control", surfaceControl, "")

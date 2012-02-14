@@ -13,7 +13,7 @@ import Plackard.Linesearch(gss)
 -- 1. wing
 wingWeight_lb :: Floating a => Config a -> a
 wingWeight_lb config =
-  4.22*s_wg + 1.642e-6*(n_ult'*(b**3)*sqrt(tow*zfw)*(1+2*taperRatio'))/(tc_avg*(cos(sweepEA))**2*s_wg*(1+taperRatio'))
+  (structuralWeightFactor config)*(4.22*s_wg + 1.642e-6*(n_ult'*(b**3)*sqrt(tow*zfw)*(1+2*taperRatio'))/(tc_avg*(cos(sweepEA))**2*s_wg*(1+taperRatio')))
 {-
 s_wg - gross wing area (ft^2)
 n_ult' - ultimate load factor
@@ -37,7 +37,7 @@ sweepEA - sweep of structural axis (radians)
 -- 2. horizontal tail
 horizTailWeight_lb :: Floating a => Config a -> a
 horizTailWeight_lb config@(Config {horizTail = ht}) =
-  5.25*s_he + 0.8e-6*(n_ult'*(b_h**3)*tow*mac_w*sqrt(s_he))/(tc_avg*(cos(sweepEA))**2*l_h*s_hg**1.5)
+  (structuralWeightFactor config)*(5.25*s_he + 0.8e-6*(n_ult'*(b_h**3)*tow*mac_w*sqrt(s_he))/(tc_avg*(cos(sweepEA))**2*l_h*s_hg**1.5))
 {-
 s_he - exposed horizontal tail area (ft^2)
 s_hg - gross horizontal tail area (ft^2)
@@ -62,7 +62,7 @@ l_h - distance behing cg of horizontal tail's aerodynamic center
 
 -- 3. vertical tail and rudder
 vertTailWeight_lb :: Floating a => Config a -> a
-vertTailWeight_lb config@(Config {vertTail = vt}) = tTailPenalty*(wVert + wRudder)
+vertTailWeight_lb config@(Config {vertTail = vt}) = (structuralWeightFactor config)*(tTailPenalty*(wVert + wRudder))
 {-
 s_v - vertical tail area including rudder (ft^2)
 n_ult' - ultimate load factor
@@ -89,7 +89,7 @@ sweepEA - vertical tail sweep of structural axis (radians)
 
 -- 4. fuselage
 fuseWeight_lb :: (Floating a, Ord a) => Config a -> a
-fuseWeight_lb config = (1.051 + 0.102*iFuse)*sFuse*allCargoMarkdown
+fuseWeight_lb config = (structuralWeightFactor config)*((1.051 + 0.102*iFuse)*sFuse*allCargoMarkdown)
   where
 {-
 sFuse - gross fuse wetted area (no cutouts for wings or anything)

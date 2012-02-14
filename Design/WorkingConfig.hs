@@ -26,6 +26,7 @@ gaCruiseConfig = Config { diameter_feet         = 61/12
                         , enginesDryWeight_lb   = 2*300
                         , electricalAndElectronics_lb = 300
                         , furnishings_lb        = 100
+                        , structuralWeightFactor = 0.9
                         , numPax                = 5
                         , numCrew               = 1
                         , numFlightAttendants   = 0
