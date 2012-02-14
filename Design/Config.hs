@@ -5,9 +5,12 @@
 module Design.Config( Config(..)
                     , HorizTail(..)
                     , VertTail(..)
+                    , SurfaceControl(..)
+                    , ACType(..)
                     , cruiseReynolds
                     , bodyFineness
-                    , chordFeet
+                    , meanAerodynamicChord_ft
+                    , rootChord_ft
                     , wSpan_ft
                     , htSpan_ft
                     , vtSpan_ft
@@ -15,6 +18,9 @@ module Design.Config( Config(..)
 
 import Warn(warn)
 import Data.List(intersperse)
+
+data SurfaceControl = FullyPowered | PartPower | FullAerodynamic deriving (Eq, Show)
+data ACType = BusinessJet | DomesticTransport | LongRangeOrOverwater deriving (Eq, Show)
 
 data Config a = Config { diameter_feet :: a
                        , totalLength_feet :: a
@@ -27,11 +33,22 @@ data Config a = Config { diameter_feet :: a
                        , aspectRatio :: a
                        , thicknessToChordRatio :: a
                        , maxTakeoffWeight_lb :: a
-                       , zeroFuelWeight_lb :: a
+                       , zeroFuelWeightEst_lb :: a
                        , sweep_deg :: a
                        , taperRatio :: a
                        , n_ult :: a
+                       , cabinPressAlt_ft :: a
+                       , ceiling_ft :: a
+                       , enginesDryWeight_lb :: a
+                       , electricalAndElectronics_lb :: a
+                       , furnishings_lb :: a
+                       , numPax :: Int
+                       , numCrew :: Int
+                       , numFlightAttendants :: Int
                        , tTail :: Bool
+                       , allCargo :: Bool
+                       , surfaceControl :: SurfaceControl
+                       , acType :: ACType
                        , horizTail :: HorizTail a
                        , vertTail :: VertTail a
                        }
@@ -94,13 +111,24 @@ instance (Floating a, Show a) => Show (Config a) where
                 , ("aspect ratio", aspectRatio, "")
                 , ("t/c", thicknessToChordRatio, "")
                 , ("max takeoff weight", maxTakeoffWeight_lb, "lbs")
-                , ("zero fuel weight", zeroFuelWeight_lb, "lbs")
+                , ("zero fuel weight (est)", zeroFuelWeightEst_lb, "lbs")
                 , ("sweep", sweep_deg, "deg")
                 , ("taper ratio", taperRatio, "")
                 , ("n_ult", n_ult, "")
                 , ("wingspan", wSpan_ft, "ft")
---                , ("T-tail", tTail, "")
-                ] ++ 
+                , ("cabin pressure altitude", cabinPressAlt_ft, "ft")
+                , ("ceiling", ceiling_ft, "ft")
+                , ("engines dry weight", enginesDryWeight_lb, "lb")
+                , ("electrical/electronics weight", electricalAndElectronics_lb, "lb")
+                , ("furnishings weight", furnishings_lb, "lb")
+--                , ("T-tail?", tTail, "")
+--                , ("all cargo?", allCargo, "")
+--                , ("surface control", surfaceControl, "")
+--                , ("# crew", numCrew, "")
+--                , ("# passengers", numPax, "")
+--                , ("# flight attendants", numFlightAttendants, "")
+--                , ("type", acType, "")
+                ] ++
                 "\n\n" ++ show (horizTail config) ++
                 "\n\n" ++ show (vertTail config)
               
@@ -115,8 +143,11 @@ vtSpan_ft (VertTail {vt'ar = ar, vt'sV_ft2 = sV_ft2}) = sqrt(sV_ft2*ar)
 wSpan_ft :: Floating a => Config a -> a
 wSpan_ft (Config {aspectRatio = ar, grossWingArea_ft2 = s}) = sqrt(s*ar)
 
-chordFeet :: Floating a => Config a -> a
-chordFeet config = sqrt $ (grossWingArea_ft2 config)/(aspectRatio config)
+meanAerodynamicChord_ft :: Floating a => Config a -> a
+meanAerodynamicChord_ft config = sqrt $ (grossWingArea_ft2 config)/(aspectRatio config)
+
+rootChord_ft :: Floating a => Config a -> a
+rootChord_ft config = 2*(meanAerodynamicChord_ft config)/(1 + taperRatio config)
 
 cruiseReynolds :: Num a => Config a -> a
 cruiseReynolds _ = warn "WARNING: using fixed reynolds only valid at 25,000 ft, 331 knots (mach 0.55), length 400 inches" re

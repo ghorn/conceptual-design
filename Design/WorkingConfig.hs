@@ -18,19 +18,30 @@ gaCruiseConfig = Config { diameter_feet         = 61/12
                         , thicknessToChordRatio = 0.12
                         , maxTakeoffWeight_lb   = 6000
                         , sweep_deg             = 0
-                        , zeroFuelWeight_lb     = 3000
+                        , zeroFuelWeightEst_lb  = 4500
                         , taperRatio            = 0.454
                         , n_ult                 = 3.64*1.5
+                        , cabinPressAlt_ft      = 8000
+                        , ceiling_ft            = 41000
+                        , enginesDryWeight_lb   = 2*300
+                        , electricalAndElectronics_lb = 300
+                        , furnishings_lb        = 100
+                        , numPax                = 5
+                        , numCrew               = 1
+                        , numFlightAttendants   = 0
                         , tTail                 = True
+                        , allCargo              = False
+                        , surfaceControl        = FullAerodynamic
+                        , acType                = BusinessJet
                         , horizTail = HorizTail { ht'ar = 6
-                                                , ht'sHe_ft2 = 10
-                                                , ht'sHg_ft2 = 10
+                                                , ht'sHe_ft2 = 30
+                                                , ht'sHg_ft2 = 30
                                                 , ht'sweep_deg = 0
                                                 , ht'tc = 0.12
-                                                , ht'lH_ft = 18
+                                                , ht'lH_ft = 15
                                                 }
-                        , vertTail = VertTail { vt'ar = 6
-                                              , vt'sV_ft2 = 10
+                        , vertTail = VertTail { vt'ar = 2
+                                              , vt'sV_ft2 = 20
                                               , vt'sweep_deg = 0
                                               , vt'tc = 0.12
                                               }
