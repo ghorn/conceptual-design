@@ -2,11 +2,11 @@
 
 {-# OPTIONS_GHC -Wall #-}
 
-module Aero.Compressiblity( computeCpStar
-                          , computeMcc
-                          , computeMDiv
-                          , plotMDivVsTOverC
-                          ) where
+module Aero.Compressibility( computeCpStar
+                           , computeMcc
+                           , computeMDiv
+                           , plotMDivVsTOverC
+                           ) where
 
 import Graphics.Rendering.Chart hiding (c)
 import Graphics.Rendering.Chart.Gtk
@@ -31,7 +31,7 @@ computeMcc cl tc lambda_deg = mcc2/cos(lambda_rad)
     mcc1 = mcc0 - (1.963 - 1.078*clp + 0.350*clp*clp)*tcp
     mcc2 = mcc1 + (2.969 - 2.738*clp + 1.469*clp*clp)*tcp*tcp
 
-lineOfSweepDeg :: (Floating a, Enum a) => a -> PlotLines a a
+lineOfSweepDeg :: (Floating a, Enum a, Show a) => a -> PlotLines a a
 lineOfSweepDeg sweepDeg = line
   where
     line = plot_lines_values ^= [[ (tc, computeMDiv 0.3 tc sweepDeg)

@@ -42,12 +42,39 @@ Build-type:          Simple
 -- Constraint on the version of Cabal needed to build this package.
 Cabal-version:       >=1.2
 
+Library
+  Exposed-modules:   Aero.Drag.WettedArea
+                     Aero.Drag.Upsweep
+                     Aero.Drag.FormAndFrictional
+                     Aero.Drag.Parasitic
+                     Aero.Reynolds
+                     Aero.Compressibility
+                     Aero.Atmosphere
+                     Aero.Lift
+                     Design.Weight
+                     Design.Config
+                     Plackard.Atmosphere
+                     Plackard.Linesearch
+
+  Other-modules:     Warn
+
+--  Build-depends:
+
+  Ghc-Options:         -Wall
+  Ghc-Prof-Options:    -prof -auto-all
 
 Executable parasiticSummary
   Main-is:           Design/ParasiticSummary.hs
-  Build-depends:     base, data-accessor, Chart >= 0.15, Chart-gtk >= 0.15
-  Ghc-options:       -O2
+  Build-depends:     base >= 4 && < 5,
+                     data-accessor,
+                     Chart >= 0.15,
+                     Chart-gtk >= 0.15
+--  Ghc-options:       -O2
 
 Executable liftSummary
   Main-is:           Design/LiftSummary.hs
-  Ghc-options:       -O2
+--  Ghc-options:       -O2
+
+Executable plackard
+  Main-is:           Plackard/Plackard.hs
+--  Ghc-options:       -O2
