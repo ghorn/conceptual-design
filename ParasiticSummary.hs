@@ -1,5 +1,3 @@
--- ParasiticSummary.hs
-
 {-# OPTIONS_GHC -Wall #-}
 
 module Main where
@@ -10,6 +8,7 @@ import Data.Accessor
 import Text.Printf
 
 import Design.Config
+import Design.WorkingConfig
 import Aero.Drag.WettedArea
 import Aero.Drag.Upsweep
 import Aero.Drag.FormAndFrictional

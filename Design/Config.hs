@@ -5,7 +5,6 @@
 module Design.Config( Config(..)
                     , HorizTail(..)
                     , VertTail(..)
-                    , gaCruiseConfig
                     , cruiseReynolds
                     , bodyFineness
                     , chordFeet
@@ -82,15 +81,6 @@ instance (Floating a, Show a) => Show (VertTail a) where
             , ("span", vtSpan_ft, "ft")
             ]
 
-htSpan_ft :: Floating a => HorizTail a -> a
-htSpan_ft (HorizTail {ht'ar = ar, ht'sHg_ft2 = sHg_ft2}) = sqrt(sHg_ft2*ar)
-                   
-vtSpan_ft :: Floating a => VertTail a -> a
-vtSpan_ft (VertTail {vt'ar = ar, vt'sV_ft2 = sV_ft2}) = sqrt(sV_ft2*ar)
-                   
-wSpan_ft :: Floating a => Config a -> a
-wSpan_ft (Config {aspectRatio = ar, grossWingArea_ft2 = s}) = sqrt(s*ar)
-
 instance (Floating a, Show a) => Show (Config a) where
   show config = prettyShow "main configuration" config
                 [ ("diameter", diameter_feet, "ft")
@@ -114,36 +104,16 @@ instance (Floating a, Show a) => Show (Config a) where
                 "\n\n" ++ show (horizTail config) ++
                 "\n\n" ++ show (vertTail config)
               
-gaCruiseConfig :: Fractional a => Config a
-gaCruiseConfig = Config { diameter_feet         = 61/12
-                        , totalLength_feet      = 400/12
-                        , noseFineness          = 2
-                        , tailFineness          = 3
-                        , cruiseAltitude_feet   = 25000
-                        , cruise_mach           = 0.55
-                        , exposedWingArea_ft2   = 144
-                        , grossWingArea_ft2     = 144
-                        , aspectRatio           = 9
-                        , thicknessToChordRatio = 0.12
-                        , maxTakeoffWeight_lb   = 6000
-                        , sweep_deg             = 0
-                        , zeroFuelWeight_lb     = 3000
-                        , taperRatio            = 0.454
-                        , n_ult                 = 3.64*1.5
-                        , tTail                 = True
-                        , horizTail = HorizTail { ht'ar = 6
-                                                , ht'sHe_ft2 = 10
-                                                , ht'sHg_ft2 = 10
-                                                , ht'sweep_deg = 0
-                                                , ht'tc = 0.12
-                                                , ht'lH_ft = 18
-                                                }
-                        , vertTail = VertTail { vt'ar = 6
-                                              , vt'sV_ft2 = 10
-                                              , vt'sweep_deg = 0
-                                              , vt'tc = 0.12
-                                              }
-                        }
+
+-- derived quantities
+htSpan_ft :: Floating a => HorizTail a -> a
+htSpan_ft (HorizTail {ht'ar = ar, ht'sHg_ft2 = sHg_ft2}) = sqrt(sHg_ft2*ar)
+                   
+vtSpan_ft :: Floating a => VertTail a -> a
+vtSpan_ft (VertTail {vt'ar = ar, vt'sV_ft2 = sV_ft2}) = sqrt(sV_ft2*ar)
+                   
+wSpan_ft :: Floating a => Config a -> a
+wSpan_ft (Config {aspectRatio = ar, grossWingArea_ft2 = s}) = sqrt(s*ar)
 
 chordFeet :: Floating a => Config a -> a
 chordFeet config = sqrt $ (grossWingArea_ft2 config)/(aspectRatio config)

@@ -3,6 +3,7 @@
 module Design.Weight where
 
 import Design.Config
+import Design.WorkingConfig
 
 wingWeight_lbs :: Floating a => Config a -> a
 wingWeight_lbs config =

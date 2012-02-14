@@ -7,13 +7,14 @@ module Aero.Reynolds( reynolds
                     ) where
 
 import Design.Config
+import Design.WorkingConfig
 import Aero.Atmosphere
 
 reynolds :: Fractional a => a -> a -> a -> a -> a
 reynolds rho v referenceLength mu = rho*v*referenceLength/mu
 
 configReynoldsOfRefLenMeters :: (Ord a, Floating a) => Config a -> a -> a
-configReynoldsOfRefLenMeters config' referenceLengthMeters = reynolds rho v referenceLengthMeters mu
+configReynoldsOfRefLenMeters _ referenceLengthMeters = reynolds rho v referenceLengthMeters mu
   where
     config = gaCruiseConfig
     rho = densitySIOfHeightFeet $ cruiseAltitude_feet config

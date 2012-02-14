@@ -53,6 +53,7 @@ Library
                      Aero.Lift
                      Design.Weight
                      Design.Config
+                     Design.WorkingConfig
                      Plackard.Atmosphere
                      Plackard.Linesearch
 
@@ -64,7 +65,7 @@ Library
   Ghc-Prof-Options:    -prof -auto-all
 
 Executable parasiticSummary
-  Main-is:           Design/ParasiticSummary.hs
+  Main-is:           ParasiticSummary.hs
   Build-depends:     base >= 4 && < 5,
                      data-accessor,
                      Chart >= 0.15,
@@ -72,7 +73,7 @@ Executable parasiticSummary
 --  Ghc-options:       -O2
 
 Executable liftSummary
-  Main-is:           Design/LiftSummary.hs
+  Main-is:           LiftSummary.hs
 --  Ghc-options:       -O2
 
 Executable plackard

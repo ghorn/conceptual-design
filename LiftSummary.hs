@@ -1,10 +1,9 @@
--- LiftSummary.hs
-
 {-# OPTIONS_GHC -Wall #-}
 
 module Main where
 
 import Aero.Lift(liftSummary)
+import Design.WorkingConfig
 import Design.Config
 
 main :: IO ()
