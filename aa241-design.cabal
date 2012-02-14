@@ -43,7 +43,9 @@ Build-type:          Simple
 Cabal-version:       >=1.2
 
 Library
-  Exposed-modules:   Aero.Drag.WettedArea
+  Exposed-modules:   Atmosphere.Atmosphere
+                     Atmosphere.Convenience
+                     Aero.Drag.WettedArea
                      Aero.Drag.Upsweep
                      Aero.Drag.FormAndFrictional
                      Aero.Drag.Parasitic
