@@ -116,6 +116,8 @@ instance (Floating a, Show a) => Show (Config a) where
                 , ("taper ratio", taperRatio, "")
                 , ("n_ult", n_ult, "")
                 , ("wingspan", wSpan_ft, "ft")
+                , ("mean aerodynamic chord", meanAerodynamicChord_ft, "ft")
+                , ("root chord", rootChord_ft, "ft")
                 , ("cabin pressure altitude", cabinPressAlt_ft, "ft")
                 , ("ceiling", ceiling_ft, "ft")
                 , ("engines dry weight", enginesDryWeight_lb, "lb")
