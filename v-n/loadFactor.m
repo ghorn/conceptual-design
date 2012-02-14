@@ -5,10 +5,10 @@ clc
 meanAerodynamicChordFt = 4;
 S_m = 13.3780378; % m^2 == 144 ft^2
 S_ft = 144;
-m = 2721.55422; % kg == 6000 lb
 g = 9.8;
+W_lb = 3000;
+m = 0.45359237*W_lb; % mass in kg
 W_kg = m*g;
-W_lb = 6000;
 rho = 0.65295;  % SI
 rho0 = 1.22419; % SI
 a_mps = 316; % speed of sound in mps at 20,000 ft
