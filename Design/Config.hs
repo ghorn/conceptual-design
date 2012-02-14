@@ -3,10 +3,15 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Design.Config( Config(..)
+                    , HorizTail(..)
+                    , VertTail(..)
                     , gaCruiseConfig
                     , cruiseReynolds
                     , bodyFineness
                     , chordFeet
+                    , wSpan_ft
+                    , htSpan_ft
+                    , vtSpan_ft
                     ) where
 
 import Warn(warn)
@@ -18,13 +23,34 @@ data Config a = Config { diameter_feet :: a
                        , tailFineness :: a
                        , cruiseAltitude_feet :: a
                        , cruise_mach :: a
-                       , wingArea_sqFeet :: a
+                       , exposedWingArea_ft2 :: a
+                       , grossWingArea_ft2 :: a
                        , aspectRatio :: a
                        , thicknessToChordRatio :: a
                        , maxTakeoffWeight_lb :: a
+                       , zeroFuelWeight_lb :: a
+                       , sweep_deg :: a
+                       , taperRatio :: a
+                       , n_ult :: a
+                       , tTail :: Bool
+                       , horizTail :: HorizTail a
+                       , vertTail :: VertTail a
                        }
 
+data HorizTail a = HorizTail { ht'ar :: a -- aspect ratio
+                             , ht'sHe_ft2 :: a -- exposed area
+                             , ht'sHg_ft2 :: a -- gross area
+                             , ht'sweep_deg :: a -- sweep
+                             , ht'tc :: a -- average thickness/chord
+                             , ht'lH_ft :: a -- distance behind aircraft cg of horiz tail's aerodynamic center
+                             }
                    
+data VertTail a = VertTail { vt'ar :: a -- aspect ratio
+                           , vt'sV_ft2 :: a -- area including rudder
+                           , vt'sweep_deg :: a -- sweep
+                           , vt'tc :: a -- average thickness/chord
+                           }
+
 prettyShow :: Show b => String -> a -> [(String, a -> b, String)] -> String
 prettyShow title thingy stuffToPrint = "------ " ++ title ++ ": -------\n" ++
                                         (concat $ (intersperse "\n" $ map nicePrint stuffToPrint))
@@ -36,6 +62,35 @@ prettyShow title thingy stuffToPrint = "------ " ++ title ++ ": -------\n" ++
     unit x = " ("++x++")"
     
     
+instance (Floating a, Show a) => Show (HorizTail a) where
+  show ht = prettyShow "horizontal tail" ht
+            [ ("ar", ht'ar, "")
+            , ("exposed area", ht'sHe_ft2, "ft^2")
+            , ("gross area", ht'sHg_ft2, "ft^2")
+            , ("sweep", ht'sweep_deg, "deg")
+            , ("t/c", ht'tc, "")
+            , ("lH", ht'lH_ft, "ft behind cg of tail aerodynamic center")
+            , ("span", htSpan_ft, "ft")
+            ]
+
+instance (Floating a, Show a) => Show (VertTail a) where
+  show vt = prettyShow "vertical tail" vt
+            [ ("ar", vt'ar, "")
+            , ("area", vt'sV_ft2, "ft^2, including rudder")
+            , ("sweep", vt'sweep_deg, "deg")
+            , ("t/c", vt'tc, "")
+            , ("span", vtSpan_ft, "ft")
+            ]
+
+htSpan_ft :: Floating a => HorizTail a -> a
+htSpan_ft (HorizTail {ht'ar = ar, ht'sHg_ft2 = sHg_ft2}) = sqrt(sHg_ft2*ar)
+                   
+vtSpan_ft :: Floating a => VertTail a -> a
+vtSpan_ft (VertTail {vt'ar = ar, vt'sV_ft2 = sV_ft2}) = sqrt(sV_ft2*ar)
+                   
+wSpan_ft :: Floating a => Config a -> a
+wSpan_ft (Config {aspectRatio = ar, grossWingArea_ft2 = s}) = sqrt(s*ar)
+
 instance (Floating a, Show a) => Show (Config a) where
   show config = prettyShow "main configuration" config
                 [ ("diameter", diameter_feet, "ft")
@@ -44,7 +99,8 @@ instance (Floating a, Show a) => Show (Config a) where
                 , ("tail fineness", tailFineness, "")
                 , ("cruise altitude", cruiseAltitude_feet, "ft")
                 , ("cruise mach", cruise_mach, "")
-                , ("wing area", wingArea_sqFeet, "ft^2")
+                , ("exposed wing area", exposedWingArea_ft2, "ft^2")
+                , ("gross wing area", grossWingArea_ft2, "ft^2")
                 , ("aspect ratio", aspectRatio, "")
                 , ("t/c", thicknessToChordRatio, "")
                 , ("max takeoff weight", maxTakeoffWeight_lb, "lbs")
@@ -53,7 +109,10 @@ instance (Floating a, Show a) => Show (Config a) where
                 , ("taper ratio", taperRatio, "")
                 , ("n_ult", n_ult, "")
                 , ("wingspan", wSpan_ft, "ft")
-                ] ++ "\n\n" ++ show (horizTail config)
+--                , ("T-tail", tTail, "")
+                ] ++ 
+                "\n\n" ++ show (horizTail config) ++
+                "\n\n" ++ show (vertTail config)
               
 gaCruiseConfig :: Fractional a => Config a
 gaCruiseConfig = Config { diameter_feet         = 61/12
@@ -62,14 +121,32 @@ gaCruiseConfig = Config { diameter_feet         = 61/12
                         , tailFineness          = 3
                         , cruiseAltitude_feet   = 25000
                         , cruise_mach           = 0.55
-                        , wingArea_sqFeet       = 144
+                        , exposedWingArea_ft2   = 144
+                        , grossWingArea_ft2     = 144
                         , aspectRatio           = 9
-                        , thicknessToChordRatio = 0.1
+                        , thicknessToChordRatio = 0.12
                         , maxTakeoffWeight_lb   = 6000
+                        , sweep_deg             = 0
+                        , zeroFuelWeight_lb     = 3000
+                        , taperRatio            = 0.454
+                        , n_ult                 = 3.64*1.5
+                        , tTail                 = True
+                        , horizTail = HorizTail { ht'ar = 6
+                                                , ht'sHe_ft2 = 10
+                                                , ht'sHg_ft2 = 10
+                                                , ht'sweep_deg = 0
+                                                , ht'tc = 0.12
+                                                , ht'lH_ft = 18
+                                                }
+                        , vertTail = VertTail { vt'ar = 6
+                                              , vt'sV_ft2 = 10
+                                              , vt'sweep_deg = 0
+                                              , vt'tc = 0.12
+                                              }
                         }
 
 chordFeet :: Floating a => Config a -> a
-chordFeet config = sqrt $ (wingArea_sqFeet config)/(aspectRatio config)
+chordFeet config = sqrt $ (grossWingArea_ft2 config)/(aspectRatio config)
 
 cruiseReynolds :: Num a => Config a -> a
 cruiseReynolds _ = warn "WARNING: using fixed reynolds only valid at 25,000 ft, 331 knots (mach 0.55), length 400 inches" re

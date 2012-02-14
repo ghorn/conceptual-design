@@ -23,7 +23,7 @@ main = do
       cF = cF_skinFriction config
       cD_formAndFrictional' = cD_formAndFrictional config
       sWet = wettedArea config
-      sWing = wingArea_sqFeet config
+      sWing = exposedWingArea_ft2 config
   
   putStrLn "-------------------------- configuration: -----------------------------"
   print config

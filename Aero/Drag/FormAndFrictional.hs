@@ -27,7 +27,7 @@ cD_frictional :: (Show a, Floating a) => Config a -> a
 cD_frictional config = cF*sWet/sWing
   where
     cF = cF_skinFriction config
-    sWing = wingArea_sqFeet config
+    sWing = exposedWingArea_ft2 config
     sWet = wettedArea config
 
 cF_skinFriction :: (Show a, Floating a) => Config a -> a

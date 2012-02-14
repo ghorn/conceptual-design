@@ -17,7 +17,7 @@ wettedArea (Config { diameter_feet = diameter
                    , totalLength_feet = overallLength
                    , noseFineness = fNose
                    , tailFineness = fTail
-                   , wingArea_sqFeet = wingArea
+                   , exposedWingArea_ft2 = wingArea
                    , thicknessToChordRatio = tOverC
                    }) = warn msg totalWettedArea
   where
@@ -65,7 +65,7 @@ printWettedArea (Config { diameter_feet = diameter
                    , totalLength_feet = overallLength
                    , noseFineness = fNose
                    , tailFineness = fTail
-                   , wingArea_sqFeet = wingArea
+                   , exposedWingArea_ft2 = wingArea
                    , thicknessToChordRatio = tOverC
                    }) = do
   let centerLength = overallLength - diameter*fNose - diameter*fTail

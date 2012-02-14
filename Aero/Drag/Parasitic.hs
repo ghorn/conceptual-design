@@ -9,9 +9,9 @@ import Aero.Drag.FormAndFrictional(cD_form, cD_frictional)
 import Aero.Drag.Upsweep(cD_upsweep)
 import Warn(warn)
 
-import Config(Config)
+import Design.Config(Config)
 
-cD_parasitic :: Floating a => Config a -> a
+cD_parasitic :: (Show a, Floating a) => Config a -> a
 cD_parasitic config = warn msg $ (cD_form config) + (cD_frictional config) + (cD_upsweep config)
   where
     msg = "WARNING: cD_parasitic currently only form/frictional/upsweep" 

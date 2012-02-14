@@ -18,8 +18,8 @@ cD_upsweep :: Floating a => Config a -> a
 cD_upsweep config = cD_wing
   where 
     maxDiameter = diameter_feet config
-    wingArea = wingArea_sqFeet config
+    exposedWingArea = exposedWingArea_ft2 config
     
-    cD_wing = (cD_pUpsweep config) * maxFuseCrossSectionalArea / wingArea
+    cD_wing = (cD_pUpsweep config) * maxFuseCrossSectionalArea / exposedWingArea
     maxFuseCrossSectionalArea = 0.25*pi*maxDiameter*maxDiameter
 
